@@ -27,7 +27,8 @@ add_action( 'after_setup_theme', 'dh_setup' );
 if ( ! function_exists( 'dh_scripts' ) ) {
     function dh_scripts() {
         //styles
-        wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css' );
+        if (!is_admin())
+            wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css' );
         wp_enqueue_style('style-dh', get_stylesheet_uri());
         //scripts
 //        wp_enqueue_script( 'scripts-dh', get_template_directory_uri() . '/js/script.js', array( 'jquery' ), false );
