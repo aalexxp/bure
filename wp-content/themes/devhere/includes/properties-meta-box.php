@@ -77,6 +77,7 @@ class Properties_Meta_Box {
         if ( is_admin() ) {
             add_action( 'load-post.php',     array( $this, 'init_metabox' ) );
             add_action( 'load-post-new.php', array( $this, 'init_metabox' ) );
+            add_action( 'post_edit_form_tag', array( $this, 'update_edit_form' ) );
         }
 
     }
@@ -644,17 +645,16 @@ class Properties_Meta_Box {
         // Check if it's not a revision.
         if ( wp_is_post_revision( $post_id ) )
             return;
-//var_dump($_REQUEST);
-//wp_die();
+
         // Sanitize user input.
         $prop_number                    = isset( $_POST[ 'prop_number' ] ) ? sanitize_text_field( $_POST[ 'prop_number' ] ) : '';
         $prop_street                    = isset( $_POST[ 'prop_street' ] ) ? sanitize_text_field( $_POST[ 'prop_street' ] ) : '';
-        $prop_street_file               = isset( $_FILES[ 'prop_street_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_street_file' ] ) : '';
+        $prop_street_file               = isset( $_FILES[ 'prop_street_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_street_file' ], array( 'test_form' => false ) ) : '';
         $prop_suburb                    = isset( $_POST[ 'prop_suburb' ] ) ? sanitize_text_field( $_POST[ 'prop_suburb' ] ) : '';
         $prop_lot                       = isset( $_POST[ 'prop_lot' ] ) ? sanitize_text_field( $_POST[ 'prop_lot' ] ) : '';
-        $prop_lot_file                  = isset( $_FILES[ 'prop_lot_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_lot_file' ] ) : '';
+        $prop_lot_file                  = isset( $_FILES[ 'prop_lot_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_lot_file' ], array( 'test_form' => false )  ) : '';
         $prop_rpsp                      = isset( $_POST[ 'prop_rpsp' ] ) ? sanitize_text_field( $_POST[ 'prop_rpsp' ] ) : '';
-        $prop_rpsp_file                 = isset( $_FILES[ 'prop_rpsp_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_rpsp_file' ] ) : '';
+        $prop_rpsp_file                 = isset( $_FILES[ 'prop_rpsp_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_rpsp_file' ], array( 'test_form' => false ) ) : '';
         $prop_status                    = isset( $_POST[ 'prop_status' ] ) ? sanitize_text_field( $_POST[ 'prop_status' ] ) : '';
         $prop_lprice                    = isset( $_POST[ 'prop_lprice' ] ) ? sanitize_text_field( $_POST[ 'prop_lprice' ] ) : '';
         $prop_agent_1                   = isset( $_POST[ 'prop_agent_1' ] ) ? sanitize_text_field( $_POST[ 'prop_agent_1' ] ) : '';
@@ -680,9 +680,9 @@ class Properties_Meta_Box {
         $prop_storm_discharge           = isset( $_POST[ 'prop_storm_discharge' ] ) ? sanitize_text_field( $_POST[ 'prop_storm_discharge' ] ) : '';
         $prop_sewer_location            = isset( $_POST[ 'prop_sewer_location' ] ) ? sanitize_text_field( $_POST[ 'prop_sewer_location' ] ) : '';
         $prop_pre_1911                  = isset( $_POST[ 'prop_pre_1911' ] ) ? sanitize_text_field( $_POST[ 'prop_pre_1911' ] ) : '';
-        $prop_pre_1911_file             = isset( $_FILES[ 'prop_pre_1911_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_pre_1911_file' ] ) : '';
+        $prop_pre_1911_file             = isset( $_FILES[ 'prop_pre_1911_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_pre_1911_file' ], array( 'test_form' => false ) ) : '';
         $prop_heritage                  = isset( $_POST[ 'prop_heritage' ] ) ? sanitize_text_field( $_POST[ 'prop_heritage' ] ) : '';
-        $prop_heritage_file             = isset( $_FILES[ 'prop_heritage_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_heritage_file' ] ) : '';
+        $prop_heritage_file             = isset( $_FILES[ 'prop_heritage_file' ] ) ? wp_handle_upload( $_FILES[ 'prop_heritage_file' ], array( 'test_form' => false ) ) : '';
         $prop_walk_dist                 = isset( $_POST[ 'prop_walk_dist' ] ) ? sanitize_text_field( $_POST[ 'prop_walk_dist' ] ) : '';
         $prop_listed_date               = isset( $_POST[ 'prop_listed_date' ] ) ? sanitize_text_field( $_POST[ 'prop_listed_date' ] ) : '';
         $prop_area_map                  = isset( $_POST[ 'prop_area_map' ] ) ? sanitize_text_field( $_POST[ 'prop_area_map' ] ) : '';
@@ -755,6 +755,10 @@ class Properties_Meta_Box {
         update_post_meta( $post_id, 'prop_neighbour_plan_map', $prop_neighbour_plan_map );
 
     }
+
+    function update_edit_form() {
+        echo ' enctype="multipart/form-data"';
+    } // end update_edit_form
 
 }
 
